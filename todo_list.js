@@ -30,6 +30,25 @@ class TodoApp extends React.Component {
         </div>
       );
     }
+    async fetchData () {
+      return await fetch('tasks.json')
+                  .then(function(response) {
+                      return response.json();
+                  }).then(function(tasks) {
+                      return tasks;
+                  })          
+  }
+  async componentDidMount() {
+      let tasks = await this.fetchData()
+      let result = []
+      Object.keys(tasks).map(function(objectKey, index) {
+          var value = tasks[objectKey];
+          result.push(value)
+      });
+      
+      this.setState({items: result})
+      
+  }
 
     handleChange(e) {
       this.setState({ text: e.target.value });
@@ -50,7 +69,7 @@ class TodoApp extends React.Component {
       }));
     }
   }
-
+  
   class TodoList extends React.Component {
     constructor(props) {
         super(props);
@@ -69,3 +88,4 @@ class TodoApp extends React.Component {
   }
   const domContainer = document.querySelector('#todo_list');
   ReactDOM.render(<TodoApp/>, domContainer);
+  
